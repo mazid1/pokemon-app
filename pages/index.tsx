@@ -30,10 +30,19 @@ const Home: NextPage = () => {
     content = <div>Loading...</div>;
   }
 
+  let getFuzzyPokemon = [];
   if (data) {
-    const { getFuzzyPokemon } = data;
+    getFuzzyPokemon = data.getFuzzyPokemon;
     content = <pre>{JSON.stringify(getFuzzyPokemon, null, 2)}</pre>;
   }
+
+  const loadMorePokemons = () => {
+    fetchMore({
+      variables: {
+        offset: getFuzzyPokemon.length,
+      },
+    });
+  };
 
   return (
     <main>
@@ -42,6 +51,12 @@ const Home: NextPage = () => {
       </Head>
       <h1>Home</h1>
       <section>{content}</section>
+      <button
+        onClick={() => loadMorePokemons()}
+        disabled={loading || loadingMore}
+      >
+        {loadingMore ? "Loading..." : "Show More"}
+      </button>
     </main>
   );
 };
