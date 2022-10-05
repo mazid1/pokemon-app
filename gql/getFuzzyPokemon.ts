@@ -6,6 +6,7 @@ export const GET_FUZZY_POKEMON = gql`
       key
       species
       types
+      sprite
       levellingRate
       bulbapediaPage
       flavorTexts {
