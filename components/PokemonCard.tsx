@@ -31,7 +31,12 @@ const PokemonCard = ({ pokemon }: Props) => {
         >
           {pokemon.key}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          height={100}
+          textOverflow={"ellipsis"}
+        >
           {pokemon.flavorTexts?.at(0)?.flavor || "---"}
         </Typography>
       </CardContent>
