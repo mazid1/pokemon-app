@@ -1,9 +1,10 @@
 import React, { PropsWithChildren } from "react";
+import TopBar from "./TopBar";
 
 const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
-      <nav>Navbar</nav>
+      <TopBar></TopBar>
       {children}
     </>
   );
