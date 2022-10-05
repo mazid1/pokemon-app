@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 export const GET_FUZZY_POKEMON = gql`
   query GetFuzzyPokemon($offset: Int!, $take: Int!, $pokemon: String!) {
     getFuzzyPokemon(offset: $offset, take: $take, pokemon: $pokemon) {
+      num
       key
       species
       types
@@ -25,6 +26,14 @@ export const GET_FUZZY_POKEMON = gql`
         specialdefense
         speed
       }
+    }
+  }
+`;
+
+export const GET_FUZZY_POKEMON_DEX_LIST = gql`
+  query GetFuzzyPokemon($offset: Int!, $take: Int!, $pokemon: String!) {
+    getFuzzyPokemon(offset: $offset, take: $take, pokemon: $pokemon) {
+      num
     }
   }
 `;
