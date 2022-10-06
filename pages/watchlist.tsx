@@ -1,4 +1,4 @@
-import { useApolloClient, useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import {
   Box,
   Button,
@@ -64,6 +64,7 @@ const Watchlist: NextPage = () => {
         direction={{ xs: "column", sm: "row" }}
         alignItems="center"
         justifyContent="space-between"
+        mb={{ xs: 4, sm: 0 }}
       >
         <Typography variant="h3" my={2}>
           Watchlist
