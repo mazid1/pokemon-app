@@ -5,6 +5,7 @@ import {
   InMemoryCache,
   from,
   NormalizedCacheObject,
+  makeVar,
 } from "@apollo/client";
 // import { onError } from "@apollo/client/link/error";
 import { concatPagination } from "@apollo/client/utilities";
@@ -30,6 +31,8 @@ let apolloClient: ApolloClient<NormalizedCacheObject>;
 //   credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
 // });
 
+export const watchlistVar = makeVar<any>({});
+
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
@@ -37,17 +40,12 @@ function createApolloClient() {
     uri: "https://graphqlpokemon.favware.tech/",
     cache: new InMemoryCache({
       typePolicies: {
-        // Type policy map
-        Pokemon: {
+        Query: {
           fields: {
-            // Field policy map for the Pokemon type
-            isInWatchlist: {
-              // Field policy for the isInWatchlist field
-              read(_, { variables }) {
-                // The read function for the isInWatchlist field
-                return localStorage
-                  ?.getItem("WATCHLIST")
-                  ?.includes(variables?.num);
+            getFuzzyPokemon: concatPagination(),
+            watchlist: {
+              read() {
+                return watchlistVar();
               },
             },
           },

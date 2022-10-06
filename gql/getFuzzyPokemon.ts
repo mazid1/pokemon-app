@@ -26,7 +26,6 @@ export const GET_FUZZY_POKEMON = gql`
         specialdefense
         speed
       }
-      isInWatchlist @client
     }
   }
 `;

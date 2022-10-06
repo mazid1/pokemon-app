@@ -2086,9 +2086,6 @@ declare type Pokemon = {
   readonly types: ReadonlyArray<Scalars["String"]>;
   /** The weight of a Pokémon in kilograms */
   readonly weight: Scalars["Float"];
-
-  /** client-only fields */
-  isInWatchlist: Scalars["Boolean"];
 };
 /** The supported Pokémon */
 declare const enum PokemonEnum {

@@ -12,16 +12,20 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import React from "react";
 import NextLink from "next/link";
 import { Pokemon } from "../graphql-pokemon";
-import { useApolloClient } from "@apollo/client";
+import { useReactiveVar } from "@apollo/client";
+import { watchlistVar } from "../libs/apolloClient";
 
 interface Props {
   pokemon: Pokemon;
 }
 
 const PokemonCard = ({ pokemon }: Props) => {
-  const apolloClient = useApolloClient();
+  const watchlist = useReactiveVar(watchlistVar);
 
-  const toggleWatchlist = () => {};
+  const toggleWatchlist = () => {
+    const isInWatchlist = watchlist[pokemon.num];
+    watchlistVar({ ...watchlistVar(), [pokemon.num]: !isInWatchlist });
+  };
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -59,7 +63,7 @@ const PokemonCard = ({ pokemon }: Props) => {
         </NextLink>
 
         <IconButton aria-label="delete" color="error" onClick={toggleWatchlist}>
-          {pokemon.isInWatchlist ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          {watchlist[pokemon.num] ? <FavoriteIcon /> : <FavoriteBorderIcon />}
         </IconButton>
       </CardActions>
     </Card>
