@@ -1,8 +1,15 @@
 import { useApolloClient, useQuery, useReactiveVar } from "@apollo/client";
-import { Box, Container, Toolbar, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import PokemonList from "../components/PokemonList";
 import {
   getFuzzyPokemonQueryVars,
@@ -18,6 +25,8 @@ const Watchlist: NextPage = () => {
     notifyOnNetworkStatusChange: true,
   });
 
+  const [isAscending, setIsAscending] = useState(true);
+
   let content: ReactNode;
   if (error) {
     content = <div>Error: {error.message}</div>;
@@ -32,6 +41,11 @@ const Watchlist: NextPage = () => {
     const loadedPokemons: Pokemon[] = data.getFuzzyPokemon;
     const watchlistPokemons = loadedPokemons.filter((p) => watchlist[p.key]);
     if (watchlistPokemons.length > 0) {
+      if (isAscending) {
+        watchlistPokemons.sort((a, b) => a.key.localeCompare(b.key));
+      } else {
+        watchlistPokemons.sort((a, b) => b.key.localeCompare(a.key));
+      }
       content = <PokemonList pokemons={watchlistPokemons} />;
     } else {
       content = <Typography>Your watchlist is empty.</Typography>;
@@ -46,9 +60,24 @@ const Watchlist: NextPage = () => {
 
       <Toolbar />
 
-      <Typography variant="h3" my={2}>
-        Watchlist
-      </Typography>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Typography variant="h3" my={2}>
+          Watchlist
+        </Typography>
+
+        <Box>
+          <Button
+            variant="contained"
+            onClick={() => setIsAscending((prev) => !prev)}
+          >
+            {isAscending ? "Sort Descending" : "Sort Ascending"}
+          </Button>
+        </Box>
+      </Stack>
 
       <Box component={"section"}>{content}</Box>
     </Container>
