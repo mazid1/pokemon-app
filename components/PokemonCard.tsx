@@ -5,6 +5,7 @@ import {
   CardMedia,
   IconButton,
   Link,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -62,9 +63,21 @@ const PokemonCard = ({ pokemon }: Props) => {
           <Link>Show Details</Link>
         </NextLink>
 
-        <IconButton aria-label="delete" color="error" onClick={toggleWatchlist}>
-          {watchlist[pokemon.key] ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-        </IconButton>
+        <Tooltip
+          title={
+            watchlist[pokemon.key]
+              ? "Remove from watchlist"
+              : "Add to watchlist"
+          }
+        >
+          <IconButton
+            aria-label="delete"
+            color="error"
+            onClick={toggleWatchlist}
+          >
+            {watchlist[pokemon.key] ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          </IconButton>
+        </Tooltip>
       </CardActions>
     </Card>
   );
