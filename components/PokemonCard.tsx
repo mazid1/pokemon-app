@@ -23,8 +23,8 @@ const PokemonCard = ({ pokemon }: Props) => {
   const watchlist = useReactiveVar(watchlistVar);
 
   const toggleWatchlist = () => {
-    const isInWatchlist = watchlist[pokemon.num];
-    watchlistVar({ ...watchlistVar(), [pokemon.num]: !isInWatchlist });
+    const isInWatchlist = watchlist[pokemon.key];
+    watchlistVar({ ...watchlistVar(), [pokemon.key]: !isInWatchlist });
   };
 
   return (
@@ -63,7 +63,7 @@ const PokemonCard = ({ pokemon }: Props) => {
         </NextLink>
 
         <IconButton aria-label="delete" color="error" onClick={toggleWatchlist}>
-          {watchlist[pokemon.num] ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          {watchlist[pokemon.key] ? <FavoriteIcon /> : <FavoriteBorderIcon />}
         </IconButton>
       </CardActions>
     </Card>

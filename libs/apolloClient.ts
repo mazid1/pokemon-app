@@ -31,7 +31,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject>;
 //   credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
 // });
 
-export const watchlistVar = makeVar<any>({});
+export const watchlistVar = makeVar<{ [key: string]: boolean }>({});
 
 function createApolloClient() {
   return new ApolloClient({
