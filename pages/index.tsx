@@ -1,6 +1,6 @@
 import { NetworkStatus, useQuery } from "@apollo/client";
 import { Box, Container, Toolbar, Typography } from "@mui/material";
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import PokemonList from "../components/PokemonList";
 import {
@@ -8,8 +8,13 @@ import {
   GET_FUZZY_POKEMON,
 } from "../gql/getFuzzyPokemon";
 import { Pokemon } from "../graphql-pokemon";
+import { initializeApollo } from "../libs/apolloClient";
 
-const Home: NextPage = () => {
+interface Props {
+  pokemons: Pokemon[];
+}
+
+const Home: NextPage<Props> = ({ pokemons }) => {
   const { loading, error, data, fetchMore, networkStatus } = useQuery(
     GET_FUZZY_POKEMON,
     {
@@ -33,9 +38,11 @@ const Home: NextPage = () => {
     content = <div>Loading...</div>;
   }
 
-  let pokemons: Pokemon[] = [];
+  let loadedPokemons: Pokemon[] = [];
   if (data) {
-    pokemons = data.getFuzzyPokemon;
+    loadedPokemons = data.getFuzzyPokemon;
+    content = <PokemonList pokemons={loadedPokemons} />;
+  } else {
     content = <PokemonList pokemons={pokemons} />;
   }
 
@@ -69,6 +76,22 @@ const Home: NextPage = () => {
       </button>
     </Container>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const apolloClient = initializeApollo();
+
+  const {
+    data: { getFuzzyPokemon: pokemons },
+  } = await apolloClient.query({
+    query: GET_FUZZY_POKEMON,
+    variables: getFuzzyPokemonQueryVars,
+  });
+
+  return {
+    // Passed to the page component as props
+    props: { pokemons: pokemons || [] },
+  };
 };
 
 export default Home;
