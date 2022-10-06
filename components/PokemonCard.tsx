@@ -33,19 +33,25 @@ const PokemonCard = ({ pokemon }: Props) => {
       <CardMedia
         component="img"
         alt="green iguana"
-        height="140"
+        height="200"
         image={pokemon.sprite}
       />
 
       <CardContent>
-        <Typography
-          gutterBottom
-          variant="h5"
-          component="div"
-          textTransform={"capitalize"}
+        <NextLink
+          href={`/species/${pokemon.species.toLocaleLowerCase()}`}
+          passHref
         >
-          {pokemon.key}
-        </Typography>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="a"
+            textTransform={"capitalize"}
+          >
+            {pokemon.species}
+          </Typography>
+        </NextLink>
+
         <Typography
           variant="body2"
           color="text.secondary"
