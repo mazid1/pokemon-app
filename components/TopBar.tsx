@@ -1,7 +1,6 @@
 import {
   AppBar,
   Box,
-  Button,
   Divider,
   Drawer,
   IconButton,
@@ -9,14 +8,19 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
+import NextLink from "next/link";
 
 const drawerWidth = 240;
-const navItems = ["Home", "Watchlist"];
+const navItems = [
+  { label: "Home", url: "/" },
+  { label: "Watchlist", url: "/watchlist" },
+];
 
 const TopBar = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -35,10 +39,12 @@ const TopBar = () => {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
+          <ListItem key={item.label} disablePadding>
+            <NextLink href={item.url} passHref>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText primary={item.label} />
+              </ListItemButton>
+            </NextLink>
           </ListItem>
         ))}
       </List>
@@ -61,17 +67,27 @@ const TopBar = () => {
           <Typography
             variant="h6"
             component="div"
+            fontWeight={"bold"}
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            {appLogo}
+            <NextLink href={"/"}>{appLogo}</NextLink>
           </Typography>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ display: { xs: "none", sm: "flex" } }}
+          >
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
-              </Button>
+              <ListItem key={item.label} disablePadding>
+                <NextLink href={item.url} passHref>
+                  <ListItemButton sx={{ textAlign: "center" }}>
+                    <ListItemText primary={item.label} />
+                  </ListItemButton>
+                </NextLink>
+              </ListItem>
             ))}
-          </Box>
+          </Stack>
         </Toolbar>
       </AppBar>
 
