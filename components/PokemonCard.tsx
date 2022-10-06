@@ -1,13 +1,14 @@
 import { Pokemon } from "@favware/graphql-pokemon";
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
+  Link,
   Typography,
 } from "@mui/material";
 import React from "react";
+import NextLink from "next/link";
 
 interface Props {
   pokemon: Pokemon;
@@ -40,8 +41,10 @@ const PokemonCard = ({ pokemon }: Props) => {
           {pokemon.flavorTexts?.at(0)?.flavor || "---"}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Show Details</Button>
+      <CardActions sx={{ p: "1rem" }}>
+        <NextLink href={`/${pokemon.num}`} passHref>
+          <Link>Show Details</Link>
+        </NextLink>
       </CardActions>
     </Card>
   );
