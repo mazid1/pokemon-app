@@ -128,6 +128,7 @@ const Home: NextPage<Props> = ({ pokemons }) => {
         alignItems="center"
         justifyContent="space-between"
         mb={{ xs: 4, sm: 0 }}
+        spacing={2}
       >
         <Typography
           variant="h3"
@@ -137,33 +138,41 @@ const Home: NextPage<Props> = ({ pokemons }) => {
           Pokemon List
         </Typography>
 
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="type-select">Type</InputLabel>
-          <Select
-            labelId="type-select"
-            id="type-select"
-            value={selectedType}
-            label="Type"
-            onChange={handleTypeChange}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {allTypes.map((t) => (
-              <MenuItem value={t} key={t}>
-                {t}
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          alignItems="center"
+          justifyContent="space-between"
+          mb={{ xs: 4, sm: 0 }}
+          spacing={2}
+        >
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="type-select">Type</InputLabel>
+            <Select
+              labelId="type-select"
+              id="type-select"
+              value={selectedType}
+              label="Type"
+              onChange={handleTypeChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
               </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+              {allTypes.map((t) => (
+                <MenuItem value={t} key={t}>
+                  {t}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-        <TextField
-          onChange={handleSearchTextChange}
-          id="outlined-search"
-          label="Search"
-          type="search"
-          size="small"
-        />
+          <TextField
+            onChange={handleSearchTextChange}
+            id="outlined-search"
+            label="Search by species"
+            type="search"
+            size="small"
+          />
+        </Stack>
       </Stack>
 
       <Box component={"section"}>{content}</Box>
