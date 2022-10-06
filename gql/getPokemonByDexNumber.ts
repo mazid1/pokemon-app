@@ -26,6 +26,7 @@ export const GET_POKEMON_BY_DEX_NUMBER = gql`
         specialdefense
         speed
       }
+      isInWatchlist @client
     }
   }
 `;

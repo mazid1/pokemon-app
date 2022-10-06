@@ -37,9 +37,19 @@ function createApolloClient() {
     uri: "https://graphqlpokemon.favware.tech/",
     cache: new InMemoryCache({
       typePolicies: {
-        Query: {
+        // Type policy map
+        Pokemon: {
           fields: {
-            getFuzzyPokemon: concatPagination(),
+            // Field policy map for the Pokemon type
+            isInWatchlist: {
+              // Field policy for the isInWatchlist field
+              read(_, { variables }) {
+                // The read function for the isInWatchlist field
+                return localStorage
+                  ?.getItem("WATCHLIST")
+                  ?.includes(variables?.num);
+              },
+            },
           },
         },
       },
