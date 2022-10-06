@@ -3,6 +3,11 @@ import {
   Box,
   Button,
   Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Stack,
   TextField,
   Toolbar,
@@ -23,6 +28,27 @@ interface Props {
   pokemons: Pokemon[];
 }
 
+const allTypes = [
+  "Bug",
+  "Dark",
+  "Dragon",
+  "Electric",
+  "Fairy",
+  "Fighting",
+  "Fire",
+  "Flying",
+  "Ghost",
+  "Grass",
+  "Ground",
+  "Ice",
+  "Normal",
+  "Poison",
+  "Psychic",
+  "Rock",
+  "Steel",
+  "Water",
+];
+
 const Home: NextPage<Props> = ({ pokemons }) => {
   const { loading, error, data, fetchMore, networkStatus } = useQuery(
     GET_FUZZY_POKEMON,
@@ -36,6 +62,7 @@ const Home: NextPage<Props> = ({ pokemons }) => {
   );
 
   const [searchText, setSearchText] = useState("");
+  const [selectedType, setSelectedType] = useState("");
 
   let content;
   const loadingMore = networkStatus === NetworkStatus.fetchMore;
@@ -63,6 +90,12 @@ const Home: NextPage<Props> = ({ pokemons }) => {
     );
   }
 
+  if (selectedType) {
+    loadedPokemons = loadedPokemons.filter((p) =>
+      p.types.includes(selectedType)
+    );
+  }
+
   content = <PokemonList pokemons={loadedPokemons} />;
 
   const loadMorePokemons = () => {
@@ -73,9 +106,13 @@ const Home: NextPage<Props> = ({ pokemons }) => {
     });
   };
 
-  const searchHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleSearchTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     const text = event.target.value.toLowerCase();
     setSearchText(text);
+  };
+
+  const handleTypeChange = (event: SelectChangeEvent) => {
+    setSelectedType(event.target.value);
   };
 
   return (
@@ -92,12 +129,36 @@ const Home: NextPage<Props> = ({ pokemons }) => {
         justifyContent="space-between"
         mb={{ xs: 4, sm: 0 }}
       >
-        <Typography variant="h3" my={2}>
+        <Typography
+          variant="h3"
+          my={2}
+          whiteSpace={{ xs: "normal", sm: "nowrap" }}
+        >
           Pokemon List
         </Typography>
 
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <InputLabel id="type-select">Type</InputLabel>
+          <Select
+            labelId="type-select"
+            id="type-select"
+            value={selectedType}
+            label="Type"
+            onChange={handleTypeChange}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {allTypes.map((t) => (
+              <MenuItem value={t} key={t}>
+                {t}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <TextField
-          onChange={searchHandler}
+          onChange={handleSearchTextChange}
           id="outlined-search"
           label="Search"
           type="search"
