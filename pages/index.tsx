@@ -1,7 +1,16 @@
 import { NetworkStatus, useQuery } from "@apollo/client";
-import { Box, Button, Container, Toolbar, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
+import { ChangeEvent, useState } from "react";
 import PokemonList from "../components/PokemonList";
 import {
   getFuzzyPokemonQueryVars,
@@ -26,6 +35,8 @@ const Home: NextPage<Props> = ({ pokemons }) => {
     }
   );
 
+  const [searchText, setSearchText] = useState("");
+
   let content;
   const loadingMore = networkStatus === NetworkStatus.fetchMore;
 
@@ -39,12 +50,20 @@ const Home: NextPage<Props> = ({ pokemons }) => {
   }
 
   let loadedPokemons: Pokemon[] = [];
+
   if (data) {
     loadedPokemons = data.getFuzzyPokemon;
-    content = <PokemonList pokemons={loadedPokemons} />;
   } else {
-    content = <PokemonList pokemons={pokemons} />;
+    loadedPokemons = pokemons;
   }
+
+  if (searchText) {
+    loadedPokemons = loadedPokemons.filter((p) =>
+      p.species.startsWith(searchText)
+    );
+  }
+
+  content = <PokemonList pokemons={loadedPokemons} />;
 
   const loadMorePokemons = () => {
     fetchMore({
@@ -52,6 +71,11 @@ const Home: NextPage<Props> = ({ pokemons }) => {
         offset: pokemons.length,
       },
     });
+  };
+
+  const searchHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const text = event.target.value.toLowerCase();
+    setSearchText(text);
   };
 
   return (
@@ -62,9 +86,24 @@ const Home: NextPage<Props> = ({ pokemons }) => {
 
       <Toolbar />
 
-      <Typography variant="h3" my={2}>
-        Pokemon List
-      </Typography>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        alignItems="center"
+        justifyContent="space-between"
+        mb={{ xs: 4, sm: 0 }}
+      >
+        <Typography variant="h3" my={2}>
+          Pokemon List
+        </Typography>
+
+        <TextField
+          onChange={searchHandler}
+          id="outlined-search"
+          label="Search"
+          type="search"
+          size="small"
+        />
+      </Stack>
 
       <Box component={"section"}>{content}</Box>
 
