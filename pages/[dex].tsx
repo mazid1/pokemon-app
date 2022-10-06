@@ -1,4 +1,3 @@
-import { Pokemon } from "@favware/graphql-pokemon";
 import {
   Box,
   Card,
@@ -31,6 +30,7 @@ import {
   GET_FUZZY_POKEMON_DEX_LIST,
 } from "../gql/getFuzzyPokemon";
 import { GET_POKEMON_BY_DEX_NUMBER } from "../gql/getPokemonByDexNumber";
+import { Pokemon } from "../graphql-pokemon";
 import { initializeApollo } from "../libs/apolloClient";
 
 interface Props {

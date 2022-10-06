@@ -22,7 +22,6 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@favware/graphql-pokemon": "^7.0.4",
     "@types/deepmerge": "^2.2.0",
     "@types/lodash": "^4.14.186",
     "@types/node": "18.8.2",

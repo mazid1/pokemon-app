@@ -1,4 +1,3 @@
-import { Pokemon } from "@favware/graphql-pokemon";
 import {
   Card,
   CardActions,
@@ -9,6 +8,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import NextLink from "next/link";
+import { Pokemon } from "../graphql-pokemon";
 
 interface Props {
   pokemon: Pokemon;

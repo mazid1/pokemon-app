@@ -1,6 +1,6 @@
-import { Pokemon } from "@favware/graphql-pokemon";
 import { Grid } from "@mui/material";
 import React from "react";
+import { Pokemon } from "../graphql-pokemon";
 import PokemonCard from "./PokemonCard";
 
 interface Props {

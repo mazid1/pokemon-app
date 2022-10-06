@@ -1,5 +1,4 @@
 import { NetworkStatus, useQuery } from "@apollo/client";
-import { Pokemon } from "@favware/graphql-pokemon";
 import { Box, Container, Toolbar, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -8,6 +7,7 @@ import {
   getFuzzyPokemonQueryVars,
   GET_FUZZY_POKEMON,
 } from "../gql/getFuzzyPokemon";
+import { Pokemon } from "../graphql-pokemon";
 
 const Home: NextPage = () => {
   const { loading, error, data, fetchMore, networkStatus } = useQuery(
