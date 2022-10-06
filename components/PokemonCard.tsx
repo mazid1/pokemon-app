@@ -59,7 +59,10 @@ const PokemonCard = ({ pokemon }: Props) => {
       <CardActions
         sx={{ p: "1rem", display: "flex", justifyContent: "space-between" }}
       >
-        <NextLink href={`/${pokemon.num}`} passHref>
+        <NextLink
+          href={`/species/${pokemon.species.toLocaleLowerCase()}`}
+          passHref
+        >
           <Link>Show Details</Link>
         </NextLink>
 

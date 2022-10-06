@@ -25,13 +25,10 @@ import {
 import Head from "next/head";
 import Image from "next/image";
 import React from "react";
-import {
-  getFuzzyPokemonQueryVars,
-  GET_FUZZY_POKEMON_DEX_LIST,
-} from "../gql/getFuzzyPokemon";
-import { GET_POKEMON_BY_DEX_NUMBER } from "../gql/getPokemonByDexNumber";
-import { Pokemon } from "../graphql-pokemon";
-import { initializeApollo } from "../libs/apolloClient";
+import { GET_ALL_POKEMON_SPECIES } from "../../gql/getAllPokemonSpecies";
+import { GET_POKEMON_BY_SPECIES } from "../../gql/getPokemon";
+import { Pokemon } from "../../graphql-pokemon";
+import { initializeApollo } from "../../libs/apolloClient";
 
 interface Props {
   pokemon: Pokemon;
@@ -183,24 +180,23 @@ const PokemonDetails: NextPage<Props> = ({ pokemon }) => {
   );
 };
 
-// Generates `/1`, `/2`
+// Generates `/species/dragonite`, `/species/abra`
 export const getStaticPaths: GetStaticPaths = async () => {
   const apolloClient = initializeApollo();
 
   const {
-    data: { getFuzzyPokemon: pokemonList },
+    data: { getAllPokemonSpecies: species },
   } = await apolloClient.query({
-    query: GET_FUZZY_POKEMON_DEX_LIST,
-    variables: getFuzzyPokemonQueryVars,
+    query: GET_ALL_POKEMON_SPECIES,
   });
 
-  const paths = pokemonList.map((p: { num: number }) => ({
-    params: { dex: p.num.toFixed() },
+  const paths = species.map((s: string) => ({
+    params: { species: s.toLocaleLowerCase() },
   }));
 
   return {
     paths,
-    fallback: false, // can also be true or 'blocking'
+    fallback: true, // can also be false or 'blocking'
   };
 };
 
@@ -209,13 +205,13 @@ export const getStaticProps: GetStaticProps = async (
   context: GetStaticPropsContext
 ) => {
   const apolloClient = initializeApollo();
-  const dex = Number(context.params?.dex);
+  const species = context.params?.species;
 
   const {
-    data: { getPokemonByDexNumber: pokemon },
+    data: { getPokemon: pokemon },
   } = await apolloClient.query({
-    query: GET_POKEMON_BY_DEX_NUMBER,
-    variables: { number: dex },
+    query: GET_POKEMON_BY_SPECIES,
+    variables: { pokemon: species },
   });
 
   return {
