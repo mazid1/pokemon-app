@@ -1,6 +1,6 @@
 import { NetworkStatus, useQuery } from "@apollo/client";
 import { Pokemon } from "@favware/graphql-pokemon";
-import { Box, Toolbar } from "@mui/material";
+import { Box, Container, Toolbar, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
 import PokemonList from "../components/PokemonList";
@@ -48,20 +48,26 @@ const Home: NextPage = () => {
   };
 
   return (
-    <Box component="main" sx={{ px: 3 }}>
+    <Container component="main" sx={{ px: 3 }} maxWidth={"xl"}>
       <Head>
         <title>Pokemon | Home</title>
       </Head>
+
       <Toolbar />
-      <h1>Home</h1>
-      <section>{content}</section>
+
+      <Typography variant="h3" my={2}>
+        Pokemon List
+      </Typography>
+
+      <Box component={"section"}>{content}</Box>
+
       <button
         onClick={() => loadMorePokemons()}
         disabled={loading || loadingMore}
       >
         {loadingMore ? "Loading..." : "Show More"}
       </button>
-    </Box>
+    </Container>
   );
 };
 
