@@ -5,14 +5,7 @@ import {
   Container,
   Divider,
   Link,
-  Paper,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -25,6 +18,11 @@ import {
 import Head from "next/head";
 import Image from "next/image";
 import React from "react";
+import BaseStatsCard from "../../components/BaseStatsCard";
+import BulbapediaCard from "../../components/BulbapediaCard";
+import FlavorsCard from "../../components/FlavorsCard";
+import GenderCard from "../../components/GenderCard";
+import TypesCard from "../../components/TypesCard";
 import { GET_ALL_POKEMON_SPECIES } from "../../gql/getAllPokemonSpecies";
 import { GET_POKEMON_BY_SPECIES } from "../../gql/getPokemon";
 import { Pokemon } from "../../graphql-pokemon";
@@ -61,52 +59,9 @@ const PokemonDetails: NextPage<Props> = ({ pokemon }) => {
             layout="fixed"
           />
 
-          <Card variant="outlined" sx={{ p: 3 }}>
-            <Typography variant="h5">Base Stats</Typography>
+          <BaseStatsCard baseStats={pokemon.baseStats} />
 
-            <Divider style={{ marginBottom: "1rem" }} />
-
-            <TableContainer component={Paper} variant="outlined">
-              <Table aria-label="base stats table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>HP</TableCell>
-                    <TableCell>Attack</TableCell>
-                    <TableCell>Defense</TableCell>
-                    <TableCell>Special Attack</TableCell>
-                    <TableCell>Special Defense</TableCell>
-                    <TableCell>Speed</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {pokemon.baseStats.hp}
-                    </TableCell>
-                    <TableCell>{pokemon.baseStats.attack}</TableCell>
-                    <TableCell>{pokemon.baseStats.defense}</TableCell>
-                    <TableCell>{pokemon.baseStats.specialattack}</TableCell>
-                    <TableCell>{pokemon.baseStats.specialdefense}</TableCell>
-                    <TableCell>{pokemon.baseStats.speed}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Card>
-
-          <Card variant="outlined" sx={{ p: 3 }}>
-            <Typography variant="h5">Flavors</Typography>
-
-            <Divider style={{ marginBottom: "1rem" }} />
-
-            {pokemon.flavorTexts.map((ft) => (
-              <Typography key={ft.game}>
-                <strong>{ft.game}:</strong> {ft.flavor}
-              </Typography>
-            ))}
-          </Card>
+          <FlavorsCard flavorTexts={[...pokemon.flavorTexts]} />
 
           <Card variant="outlined" sx={{ p: 3 }}>
             <Typography variant="h5">Leveling Rate</Typography>
@@ -116,46 +71,9 @@ const PokemonDetails: NextPage<Props> = ({ pokemon }) => {
             {pokemon.levellingRate}
           </Card>
 
-          <Card variant="outlined" sx={{ p: 3 }}>
-            <Typography variant="h5">Types</Typography>
+          <TypesCard types={[...pokemon.types]} />
 
-            <Divider style={{ marginBottom: "1rem" }} />
-
-            {pokemon.types.map((t) => (
-              <Chip key={t} label={t} />
-            ))}
-          </Card>
-
-          <Card variant="outlined" sx={{ p: 3 }}>
-            <Typography variant="h5">Gender</Typography>
-
-            <Divider style={{ marginBottom: "1rem" }} />
-
-            <TableContainer
-              component={Paper}
-              sx={{ maxWidth: 400 }}
-              variant="outlined"
-            >
-              <Table aria-label="gender table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Male</TableCell>
-                    <TableCell>Female</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {pokemon.gender.male}
-                    </TableCell>
-                    <TableCell>{pokemon.gender.female}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Card>
+          <GenderCard gender={pokemon.gender} />
 
           <Card variant="outlined" sx={{ p: 3 }}>
             <Typography variant="h5">Species</Typography>
@@ -165,15 +83,7 @@ const PokemonDetails: NextPage<Props> = ({ pokemon }) => {
             <Chip label={pokemon.species} />
           </Card>
 
-          <Card variant="outlined" sx={{ p: 3 }}>
-            <Typography variant="h5">Bulbapedia Page</Typography>
-
-            <Divider style={{ marginBottom: "1rem" }} />
-
-            <Link href={pokemon.bulbapediaPage} target="_blank">
-              {pokemon.bulbapediaPage}
-            </Link>
-          </Card>
+          <BulbapediaCard bulbapediaPage={pokemon.bulbapediaPage} />
         </Stack>
       </Box>
     </Container>
