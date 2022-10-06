@@ -1,5 +1,5 @@
 import { NetworkStatus, useQuery } from "@apollo/client";
-import { Box, Container, Toolbar, Typography } from "@mui/material";
+import { Box, Button, Container, Toolbar, Typography } from "@mui/material";
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import PokemonList from "../components/PokemonList";
@@ -55,7 +55,7 @@ const Home: NextPage<Props> = ({ pokemons }) => {
   };
 
   return (
-    <Container component="main" sx={{ px: 3 }} maxWidth={"xl"}>
+    <Container component="main" sx={{ px: 3, mb: 5 }} maxWidth={"xl"}>
       <Head>
         <title>Pokemon | Home</title>
       </Head>
@@ -68,12 +68,15 @@ const Home: NextPage<Props> = ({ pokemons }) => {
 
       <Box component={"section"}>{content}</Box>
 
-      <button
-        onClick={() => loadMorePokemons()}
-        disabled={loading || loadingMore}
-      >
-        {loadingMore ? "Loading..." : "Show More"}
-      </button>
+      <Box display="flex" justifyContent="center" alignItems="center" my={4}>
+        <Button
+          onClick={() => loadMorePokemons()}
+          disabled={loading || loadingMore}
+          variant="contained"
+        >
+          {loadingMore ? "Loading..." : "Show More"}
+        </Button>
+      </Box>
     </Container>
   );
 };
