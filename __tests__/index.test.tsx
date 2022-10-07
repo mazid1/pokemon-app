@@ -63,4 +63,13 @@ describe("Home", () => {
     expect(await screen.findByText("Pokemon List")).toBeInTheDocument();
     expect(await screen.findByText("azumarill")).toBeInTheDocument();
   });
+
+  it("renders 'Show More' button", async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Home pokemons={pokemons} />
+      </MockedProvider>
+    );
+    expect(await screen.findByText("Show More")).toBeInTheDocument();
+  });
 });
