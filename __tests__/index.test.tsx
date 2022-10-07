@@ -1,7 +1,7 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { render, screen } from "@testing-library/react";
-import Home from "../pages/index";
 import "@testing-library/jest-dom";
+import Home from "../pages/index";
 import {
   getFuzzyPokemonQueryVars,
   GET_FUZZY_POKEMON,
