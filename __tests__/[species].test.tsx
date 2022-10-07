@@ -34,10 +34,6 @@ const pokemon: any = {
 describe("PokemonDetails", () => {
   it("renders pokemon species", async () => {
     render(<PokemonDetails pokemon={pokemon} />);
-    expect(
-      await (
-        await screen.findAllByText("azumarill")
-      ).length
-    ).toBeGreaterThan(0);
+    expect((await screen.findAllByText("azumarill")).length).toBeGreaterThan(0);
   });
 });
