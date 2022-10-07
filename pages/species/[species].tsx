@@ -22,7 +22,10 @@ import BulbapediaCard from "../../components/BulbapediaCard";
 import FlavorsCard from "../../components/FlavorsCard";
 import GenderCard from "../../components/GenderCard";
 import TypesCard from "../../components/TypesCard";
-import { GET_ALL_POKEMON_SPECIES } from "../../gql/getAllPokemonSpecies";
+import {
+  getFuzzyPokemonQueryVars,
+  GET_FUZZY_POKEMON_KEY_LIST,
+} from "../../gql/getFuzzyPokemon";
 import { GET_POKEMON_BY_SPECIES } from "../../gql/getPokemon";
 import { Pokemon } from "../../graphql-pokemon";
 import { initializeApollo } from "../../libs/apolloClient";
@@ -94,13 +97,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const apolloClient = initializeApollo();
 
   const {
-    data: { getAllPokemonSpecies: species },
+    data: { getFuzzyPokemon: species },
   } = await apolloClient.query({
-    query: GET_ALL_POKEMON_SPECIES,
+    query: GET_FUZZY_POKEMON_KEY_LIST,
+    variables: getFuzzyPokemonQueryVars,
   });
 
-  const paths = species.map((s: string) => ({
-    params: { species: s.toLocaleLowerCase() },
+  const paths = species.map((s: { key: string }) => ({
+    params: { species: s.key },
   }));
 
   return {

@@ -30,10 +30,10 @@ export const GET_FUZZY_POKEMON = gql`
   }
 `;
 
-export const GET_FUZZY_POKEMON_DEX_LIST = gql`
+export const GET_FUZZY_POKEMON_KEY_LIST = gql`
   query GetFuzzyPokemon($offset: Int!, $take: Int!, $pokemon: String!) {
     getFuzzyPokemon(offset: $offset, take: $take, pokemon: $pokemon) {
-      num
+      key
     }
   }
 `;
