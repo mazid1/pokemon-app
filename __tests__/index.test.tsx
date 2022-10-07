@@ -61,5 +61,6 @@ describe("Home", () => {
       </MockedProvider>
     );
     expect(await screen.findByText("Pokemon List")).toBeInTheDocument();
+    expect(await screen.findByText("azumarill")).toBeInTheDocument();
   });
 });
