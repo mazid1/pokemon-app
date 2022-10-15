@@ -22,7 +22,7 @@ import {
   GET_FUZZY_POKEMON,
 } from "../gql/getFuzzyPokemon";
 import { Pokemon } from "../graphql-pokemon";
-import { initializeApollo } from "../libs/apolloClient";
+import { addApolloState, initializeApollo } from "../libs/apolloClient";
 
 interface Props {
   pokemons: Pokemon[];
@@ -200,10 +200,9 @@ export const getStaticProps: GetStaticProps = async () => {
     variables: getFuzzyPokemonQueryVars,
   });
 
-  return {
-    // Passed to the page component as props
+  return addApolloState(apolloClient, {
     props: { pokemons: pokemons || [] },
-  };
+  });
 };
 
 export default Home;
