@@ -101,7 +101,7 @@ const Home: NextPage<Props> = ({ pokemons }) => {
   const loadMorePokemons = () => {
     fetchMore({
       variables: {
-        offset: pokemons.length,
+        offset: loadedPokemons.length,
       },
     });
   };
