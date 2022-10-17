@@ -23,13 +23,46 @@ function createApolloClient() {
       typePolicies: {
         Query: {
           fields: {
-            getFuzzyPokemon: concatPagination(),
+            getFuzzyPokemon: {
+              keyArgs: false,
+              merge(
+                existing: any[],
+                incoming: any[],
+                { readField, mergeObjects }
+              ) {
+                const merged: any[] = existing ? existing.slice(0) : [];
+                const pokemonKeyToIndex: Record<string, number> =
+                  Object.create(null);
+                if (existing) {
+                  existing.forEach((pokemon, index) => {
+                    pokemonKeyToIndex[readField<string>("key", pokemon)!] =
+                      index;
+                  });
+                }
+                incoming.forEach((pokemon) => {
+                  const key = readField<string>("key", pokemon);
+                  const index = pokemonKeyToIndex[key!];
+                  if (typeof index === "number") {
+                    // Merge the new pokemon data with the existing pokemon data.
+                    merged[index] = mergeObjects(merged[index], pokemon);
+                  } else {
+                    // First time we've seen this pokemon in this array.
+                    pokemonKeyToIndex[key!] = merged.length;
+                    merged.push(pokemon);
+                  }
+                });
+                return merged;
+              },
+            },
             watchlist: {
               read() {
                 return watchlistVar();
               },
             },
           },
+        },
+        Pokemon: {
+          keyFields: ["key"],
         },
       },
     }),
