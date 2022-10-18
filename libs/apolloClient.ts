@@ -3,7 +3,6 @@ import {
   ApolloClient,
   InMemoryCache,
   NormalizedCacheObject,
-  makeVar,
 } from "@apollo/client";
 import { offsetLimitPagination } from "@apollo/client/utilities";
 import merge from "deepmerge";
@@ -12,8 +11,6 @@ import isEqual from "lodash/isEqual";
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
-
-export const watchlistVar = makeVar<{ [key: string]: boolean }>({});
 
 function createApolloClient() {
   return new ApolloClient({
@@ -28,6 +25,15 @@ function createApolloClient() {
         },
         Pokemon: {
           keyFields: ["key"],
+          fields: {
+            isInWatchlist: {
+              read(_, { readField }) {
+                if (typeof window === "undefined") return false;
+                const pokemonKey: string = readField("key")!;
+                return localStorage.getItem("WATCHLIST")?.includes(pokemonKey);
+              },
+            },
+          },
         },
       },
     }),

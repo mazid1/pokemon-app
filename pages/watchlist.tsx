@@ -1,4 +1,4 @@
-import { useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   Box,
   Button,
@@ -16,10 +16,8 @@ import {
   GET_FUZZY_POKEMON,
 } from "../gql/getFuzzyPokemon";
 import { Pokemon } from "../graphql-pokemon";
-import { watchlistVar } from "../libs/apolloClient";
 
 const Watchlist: NextPage = () => {
-  const watchlist = useReactiveVar(watchlistVar);
   const { loading, error, data } = useQuery(GET_FUZZY_POKEMON, {
     variables: getFuzzyPokemonQueryVars,
     notifyOnNetworkStatusChange: true,
@@ -39,7 +37,7 @@ const Watchlist: NextPage = () => {
 
   if (data) {
     const loadedPokemons: Pokemon[] = data.getFuzzyPokemon;
-    const watchlistPokemons = loadedPokemons.filter((p) => watchlist[p.key]);
+    const watchlistPokemons = loadedPokemons.filter((p) => p.isInWatchlist);
     if (watchlistPokemons.length > 0) {
       if (isAscending) {
         watchlistPokemons.sort((a, b) => a.key.localeCompare(b.key));
