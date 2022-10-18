@@ -13,19 +13,34 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import React from "react";
 import NextLink from "next/link";
 import { Pokemon } from "../graphql-pokemon";
-import { useReactiveVar } from "@apollo/client";
-import { watchlistVar } from "../libs/apolloClient";
+import { useApolloClient } from "@apollo/client";
 
 interface Props {
   pokemon: Pokemon;
 }
 
 const PokemonCard = ({ pokemon }: Props) => {
-  const watchlist = useReactiveVar(watchlistVar);
+  const client = useApolloClient();
 
   const toggleWatchlist = () => {
-    const isInWatchlist = watchlist[pokemon.key];
-    watchlistVar({ ...watchlistVar(), [pokemon.key]: !isInWatchlist });
+    const watchlistItems = localStorage.getItem("WATCHLIST");
+    if (watchlistItems) {
+      if (watchlistItems.includes(pokemon.key)) {
+        const updatedWatchlistItems = watchlistItems
+          .split(",")
+          .filter((s) => s !== pokemon.key)
+          .join(",");
+        localStorage.setItem("WATCHLIST", updatedWatchlistItems);
+      } else {
+        localStorage.setItem("WATCHLIST", `${watchlistItems},${pokemon.key}`);
+      }
+    } else {
+      localStorage.setItem("WATCHLIST", pokemon.key);
+    }
+    client.cache.evict({
+      id: `Pokemon:{"key":"${pokemon.key}"}`,
+      fieldName: "isInWatchlist",
+    });
   };
 
   return (
@@ -68,9 +83,7 @@ const PokemonCard = ({ pokemon }: Props) => {
 
         <Tooltip
           title={
-            watchlist[pokemon.key]
-              ? "Remove from watchlist"
-              : "Add to watchlist"
+            pokemon.isInWatchlist ? "Remove from watchlist" : "Add to watchlist"
           }
         >
           <IconButton
@@ -78,7 +91,7 @@ const PokemonCard = ({ pokemon }: Props) => {
             color="error"
             onClick={toggleWatchlist}
           >
-            {watchlist[pokemon.key] ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            {pokemon.isInWatchlist ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
         </Tooltip>
       </CardActions>

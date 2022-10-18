@@ -2012,6 +2012,7 @@ declare const enum MovesEnum {
 }
 /** A Pokémon's entry */
 declare type Pokemon = {
+  isInWatchlist: boolean;
   /** The abilities for a Pokémon */
   readonly abilities: Abilities;
   /** The back sprite for a Pokémon. For most Pokémon this will be the animated gif, with some exceptions that were older-gen exclusive */
