@@ -101,7 +101,7 @@ const Home: NextPage<Props> = ({ pokemons }) => {
   const loadMorePokemons = () => {
     fetchMore({
       variables: {
-        offset: loadedPokemons.length,
+        offset: data.getFuzzyPokemon.length,
       },
     });
   };

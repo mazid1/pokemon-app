@@ -5,7 +5,6 @@ import {
   NormalizedCacheObject,
   makeVar,
 } from "@apollo/client";
-import { concatPagination } from "@apollo/client/utilities";
 import merge from "deepmerge";
 import isEqual from "lodash/isEqual";
 
@@ -24,12 +23,15 @@ function createApolloClient() {
         Query: {
           fields: {
             getFuzzyPokemon: {
+              // Don't cache separate results based on any of this field's arguments.
               keyArgs: false,
+              // Concatenate the incoming list items with the existing list items.
               merge(
                 existing: any[],
                 incoming: any[],
                 { readField, mergeObjects }
               ) {
+                // Slicing is necessary because the existing data is immutable, and frozen in development.
                 const merged: any[] = existing ? existing.slice(0) : [];
                 const pokemonKeyToIndex: Record<string, number> =
                   Object.create(null);
