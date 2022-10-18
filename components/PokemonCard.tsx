@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NextLink from "next/link";
 import { Pokemon } from "../graphql-pokemon";
 import { useApolloClient } from "@apollo/client";
@@ -21,22 +21,32 @@ interface Props {
 
 const PokemonCard = ({ pokemon }: Props) => {
   const client = useApolloClient();
+  const [isInWatchlist, setIsInWatchlist] = useState(false);
+
+  useEffect(() => {
+    const watchlist = localStorage.getItem("WATCHLIST");
+    if (watchlist && watchlist.includes(pokemon.key)) {
+      setIsInWatchlist(true);
+    }
+  }, [pokemon.key]);
 
   const toggleWatchlist = () => {
     const watchlistItems = localStorage.getItem("WATCHLIST");
-    if (watchlistItems) {
-      if (watchlistItems.includes(pokemon.key)) {
-        const updatedWatchlistItems = watchlistItems
-          .split(",")
-          .filter((s) => s !== pokemon.key)
-          .join(",");
-        localStorage.setItem("WATCHLIST", updatedWatchlistItems);
-      } else {
-        localStorage.setItem("WATCHLIST", `${watchlistItems},${pokemon.key}`);
-      }
+    if (pokemon.isInWatchlist) {
+      const updatedWatchlistItems = watchlistItems
+        ?.split(",")
+        .filter((key) => key !== pokemon.key)
+        .join(",")!;
+      localStorage.setItem("WATCHLIST", updatedWatchlistItems);
+      setIsInWatchlist(false);
+    } else if (watchlistItems) {
+      localStorage.setItem("WATCHLIST", `${watchlistItems},${pokemon.key}`);
+      setIsInWatchlist(true);
     } else {
       localStorage.setItem("WATCHLIST", pokemon.key);
+      setIsInWatchlist(true);
     }
+
     client.cache.evict({
       id: `Pokemon:{"key":"${pokemon.key}"}`,
       fieldName: "isInWatchlist",
@@ -82,16 +92,14 @@ const PokemonCard = ({ pokemon }: Props) => {
         </NextLink>
 
         <Tooltip
-          title={
-            pokemon.isInWatchlist ? "Remove from watchlist" : "Add to watchlist"
-          }
+          title={isInWatchlist ? "Remove from watchlist" : "Add to watchlist"}
         >
           <IconButton
             aria-label="delete"
             color="error"
             onClick={toggleWatchlist}
           >
-            {pokemon.isInWatchlist ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            {isInWatchlist ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
         </Tooltip>
       </CardActions>
