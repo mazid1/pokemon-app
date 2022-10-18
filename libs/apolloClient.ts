@@ -24,11 +24,6 @@ function createApolloClient() {
         Query: {
           fields: {
             getFuzzyPokemon: offsetLimitPagination(),
-            watchlist: {
-              read() {
-                return watchlistVar();
-              },
-            },
           },
         },
         Pokemon: {
